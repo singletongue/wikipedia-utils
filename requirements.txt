@@ -1,0 +1,9 @@
+beautifulsoup4
+elasticsearch>=6.0.0,<7.0.0
+fugashi
+grequests
+logzero
+lxml
+requests
+tqdm
+unidic_lite

@@ -82,8 +82,14 @@ $ python get_page_htmls.py \
 --mobile
 
 # If you want the output file sorted by the page id:
-$ zcat ~/work/wikipedia-utils/20211129/page-htmls-jawiki-20211129.gz|jq -s -c 'sort_by(.pageid)[]'|gzip > ~/work/wikipedia-utils/20211129/page-htmls-jawiki-20211129-sorted.json.gz
-$ mv ~/work/wikipedia-utils/20211129/page-htmls-jawiki-20211129-sorted.json.gz ~/work/wikipedia-utils/20211129/page-htmls-jawiki-20211129.gz
+$ zcat ~/work/wikipedia-utils/20211129/page-htmls-jawiki-20211129.json.gz|jq -s -c 'sort_by(.pageid)[]'|gzip > ~/work/wikipedia-utils/20211129/page-htmls-jawiki-20211129-sorted.json.gz
+$ mv ~/work/wikipedia-utils/20211129/page-htmls-jawiki-20211129-sorted.json.gz ~/work/wikipedia-utils/20211129/page-htmls-jawiki-20211129.json.gz
+
+# Splitting the file for distribution
+$ gunzip ~/work/wikipedia-utils/20211129/page-htmls-jawiki-20211129.json.gz
+$ split -n l/5 --numeric-suffixes=1 --additional-suffix=.json ~/work/wikipedia-utils/20211129/page-htmls-jawiki-20211129.json ~/work/wikipedia-utils/20211129/page-htmls-jawiki-20211129.
+$ gzip ~/work/wikipedia-utils/20211129/page-htmls-jawiki-20211129.*.json
+$ gzip ~/work/wikipedia-utils/20211129/page-htmls-jawiki-20211129.json
 ```
 
 The script outputs a gzipped JSON Lines file containing following items, one item per line:

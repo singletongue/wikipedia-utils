@@ -44,22 +44,20 @@ ES_SETTINGS = {
     }
 }
 ES_MAPPINGS = {
-    "passage": {
-        "properties": {
-            "id": {"type": "integer"},
-            "pageid": {"type": "integer"},
-            "revid": {"type": "integer"},
-            "title": {"type": "keyword"},
-            "section": {"type": "keyword"},
-            "text": {
-                "type": "text",
-                "analyzer": "custom_analyzer"
-            },
-            "num_inlinks": {"type": "integer"},
-            "is_disambiguation_page": {"type": "boolean"},
-            "is_sexual_page": {"type": "boolean"},
-            "is_violent_page": {"type": "boolean"},
-        }
+    "properties": {
+        "id": {"type": "integer"},
+        "pageid": {"type": "integer"},
+        "revid": {"type": "integer"},
+        "title": {"type": "keyword"},
+        "section": {"type": "keyword"},
+        "text": {
+            "type": "text",
+            "analyzer": "custom_analyzer"
+        },
+        "num_inlinks": {"type": "integer"},
+        "is_disambiguation_page": {"type": "boolean"},
+        "is_sexual_page": {"type": "boolean"},
+        "is_violent_page": {"type": "boolean"},
     }
 }
 
@@ -68,7 +66,7 @@ def main(args):
     es = Elasticsearch(hosts=[{"host": args.hostname, "port": args.port}], timeout=60)
 
     logger.info("Creating an Elasticsearch index")
-    es.indices.create(index=args.index_name, body={"settings": ES_SETTINGS, "mappings": ES_MAPPINGS})
+    es.indices.create(index=args.index_name, settings=ES_SETTINGS, mappings=ES_MAPPINGS)
 
     logger.info("Loading page ids file")
     page_info = dict()
@@ -86,7 +84,6 @@ def main(args):
                 pageid = passage_item["pageid"]
                 yield {
                     "_index": args.index_name,
-                    "_type": "passage",
                     "_source": {
                         "id": passage_item["id"],
                         "pageid": passage_item["pageid"],

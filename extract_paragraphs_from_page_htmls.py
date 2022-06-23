@@ -17,14 +17,14 @@ import json
 from unicodedata import normalize
 
 from bs4 import BeautifulSoup
+from logzero import logger
 from tqdm import tqdm
 
 
-SECTIONS_TO_IGNORE = ["脚注", "出典", "参考文献", "関連項目", "外部リンク"]
-TAGS_TO_REMOVE = ["table"]
-TAGS_TO_EXTRACT = ["p"]
-# TAGS_TO_EXTRACT = ["p", "li"]
-INNER_TAGS_TO_REMOVE = ["sup"]
+DEFAULT_SECTIONS_TO_IGNORE = ["脚注", "出典", "参考文献", "関連項目", "外部リンク"]
+DEFAULT_TAGS_TO_REMOVE = ["table"]
+DEFAULT_TAGS_TO_EXTRACT = ["p"]
+DEFAULT_INNER_TAGS_TO_REMOVE = ["sup"]
 
 
 def normalize_text(text):
@@ -35,7 +35,7 @@ def normalize_text(text):
     return text
 
 
-def extract_paragraphs_from_html(html):
+def extract_paragraphs_from_html(html, tags_to_extract, tags_to_remove, inner_tags_to_remove):
     soup = BeautifulSoup(html, features="lxml")
     section_title = "__LEAD__"
     section = soup.find(["section"])
@@ -43,20 +43,45 @@ def extract_paragraphs_from_html(html):
         if section.h2 is not None:
             section_title = section.h2.text
 
-        for tag in section.find_all(TAGS_TO_REMOVE):
+        for tag in section.find_all(tags_to_remove):
             tag.clear()
 
-        for tag in section.find_all(TAGS_TO_EXTRACT):
-            for inner_tag in tag.find_all(INNER_TAGS_TO_REMOVE):
+        for tag in section.find_all(tags_to_extract):
+            for inner_tag in tag.find_all(inner_tags_to_remove):
                 inner_tag.clear()
 
             paragraph_text = normalize_text(tag.text)
-            yield (section_title, paragraph_text)
+            yield (section_title, paragraph_text, tag.name)
 
         section = section.find_next_sibling(["section"])
 
 
 def main(args):
+    if args.tags_to_extract is not None:
+        tags_to_extract = args.tags_to_extract
+    else:
+        tags_to_extract = DEFAULT_TAGS_TO_EXTRACT
+
+    if args.tags_to_remove is not None:
+        tags_to_remove = args.tags_to_remove
+    else:
+        tags_to_remove = DEFAULT_TAGS_TO_REMOVE
+
+    if args.inner_tags_to_remove is not None:
+        inner_tags_to_remove = args.inner_tags_to_remove
+    else:
+        inner_tags_to_remove = DEFAULT_INNER_TAGS_TO_REMOVE
+
+    if args.sections_to_ignore is not None:
+        sections_to_ignore = args.sections_to_ignore
+    else:
+        sections_to_ignore = DEFAULT_SECTIONS_TO_IGNORE
+
+    logger.info("tags_to_extract: %s", tags_to_extract)
+    logger.info("tags_to_remove: %s", tags_to_remove)
+    logger.info("inner_tags_to_remove: %s", inner_tags_to_remove)
+    logger.info("sections_to_ignore: %s", sections_to_ignore)
+
     with gzip.open(args.page_htmls_file, "rt") as f, gzip.open(args.output_file, "wt") as fo:
         for line in tqdm(f):
             input_item = json.loads(line.rstrip("\n"))
@@ -66,8 +91,10 @@ def main(args):
             html = input_item["html"]
 
             paragraph_index = 0
-            for (section_title, paragraph_text) in extract_paragraphs_from_html(html):
-                if section_title in SECTIONS_TO_IGNORE:
+            for item in extract_paragraphs_from_html(html, tags_to_extract, tags_to_remove, inner_tags_to_remove):
+                section_title, paragraph_text, tag_name = item
+
+                if section_title in sections_to_ignore:
                     continue
                 if len(paragraph_text) < args.min_paragraph_length:
                     continue
@@ -82,6 +109,7 @@ def main(args):
                     "title": title,
                     "section": section_title,
                     "text": paragraph_text,
+                    "html_tag": tag_name,
                 }
                 print(json.dumps(output_item, ensure_ascii=False), file=fo)
                 paragraph_index += 1
@@ -91,6 +119,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--page_htmls_file", type=str, required=True)
     parser.add_argument("--output_file", type=str, required=True)
+    parser.add_argument("--tags_to_extract", nargs="+", type=str)
+    parser.add_argument("--tags_to_remove", nargs="+", type=str)
+    parser.add_argument("--inner_tags_to_remove", nargs="+", type=str)
+    parser.add_argument("--sections_to_ignore", nargs="+", type=str)
     parser.add_argument("--min_paragraph_length", type=int, default=10)
     parser.add_argument("--max_paragraph_length", type=int, default=1000)
     args = parser.parse_args()

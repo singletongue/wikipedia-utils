@@ -95,7 +95,7 @@ def main(args):
                     response = requests.get(page_item["url"], headers=headers, timeout=args.timeout * 5)
                     response.raise_for_status()
                 except Exception as e:
-                    logger.warning("Request for %s failed: %s", url, e)
+                    logger.warning("Request for %s failed: %s", page_item["url"], e)
                     continue
 
                 page_item["html"] = response.text

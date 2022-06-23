@@ -63,6 +63,8 @@ def main(args):
             paragraph_item = json.loads(line)
             if paragraph_item["pageid"] in pageids_to_filter_out:
                 continue
+            if args.html_tags_to_use is not None and paragraph_item["html_tag"] not in args.html_tags_to_use:
+                continue
 
             if paragraph_item["title"] != page_title:
                 if is_page_processed:
@@ -91,10 +93,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--paragraphs_file", type=str, required=True)
     parser.add_argument("--output_file", type=str, required=True)
-    parser.add_argument("--page_ids_file", type=str)
     parser.add_argument("--mecab_option", type=str)
+    parser.add_argument("--html_tags_to_use", nargs="+", type=str)
     parser.add_argument("--min_sentence_length", type=int, default=10)
     parser.add_argument("--max_sentence_length", type=int, default=1000)
+    parser.add_argument("--page_ids_file", type=str)
     parser.add_argument("--min_inlinks", type=int)
     parser.add_argument("--exclude_disambiguation_pages", action="store_true")
     parser.add_argument("--exclude_sexual_pages", action="store_true")

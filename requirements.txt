@@ -1,9 +1,9 @@
-beautifulsoup4
-elasticsearch>=6.0.0,<7.0.0
-fugashi
+beautifulsoup4==4.9.3
+elasticsearch>=7.0.0,<8.0.0
+fugashi==1.1.2
 grequests
 logzero
 lxml
 requests
 tqdm
-unidic_lite
+unidic_lite==1.0.8

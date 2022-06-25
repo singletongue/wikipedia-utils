@@ -86,7 +86,7 @@ $ mv ~/work/wikipedia-utils/20220404/page-htmls-jawiki-20220404-sorted.json.gz ~
 
 # Splitting the file for distribution
 $ gunzip ~/work/wikipedia-utils/20220404/page-htmls-jawiki-20220404.json.gz
-$ split -n l/5 --numeric-suffixes=1 --additional-suffix=.json ~/work/wikipedia-utils/20220404/page-htmls-jawiki-20220404.json ~/work/wikipedia-utils/20220404/page-htmls-jawiki-20220404.
+$ split -n l/7 --numeric-suffixes=1 --additional-suffix=.json ~/work/wikipedia-utils/20220404/page-htmls-jawiki-20220404.json ~/work/wikipedia-utils/20220404/page-htmls-jawiki-20220404.
 $ gzip ~/work/wikipedia-utils/20220404/page-htmls-jawiki-20220404.*.json
 $ gzip ~/work/wikipedia-utils/20220404/page-htmls-jawiki-20220404.json
 ```

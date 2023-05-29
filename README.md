@@ -1,6 +1,7 @@
 # Wikipedia-Utils: Preprocessing Wikipedia Texts for NLP
 
 This repository maintains some utility scripts for retrieving and preprocessing Wikipedia text for natural language processing (NLP) research.
+Some of the preprocessed files are also available at [Hugging Face Hub](https://huggingface.co/datasets/singletongue/wikipedia-utils).
 
 **Note:**
 The scripts have been created for and tested with the Japanese version of Wikipedia only.

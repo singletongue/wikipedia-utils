@@ -39,12 +39,12 @@ It also adds the following information to each item based on the information in 
 
 ```sh
 $ python get_all_page_ids_from_cirrussearch.py \
---cirrus_file ~/data/wikipedia/cirrussearch/20230403/jawiki-20230403-cirrussearch-content.json.gz \
---output_file ~/work/wikipedia-utils/20230403/page-ids-jawiki-20230403.json
+--cirrus_file ~/data/wikipedia/cirrussearch/20240401/jawiki-20240401-cirrussearch-content.json.gz \
+--output_file ~/work/wikipedia-utils/20240401/page-ids-jawiki-20240401.json
 
 # If you want the output file sorted by the page id:
-$ cat ~/work/wikipedia-utils/20230403/page-ids-jawiki-20230403.json|jq -s -c 'sort_by(.pageid)[]' > ~/work/wikipedia-utils/20230403/page-ids-jawiki-20230403-sorted.json
-$ mv ~/work/wikipedia-utils/20230403/page-ids-jawiki-20230403-sorted.json ~/work/wikipedia-utils/20230403/page-ids-jawiki-20230403.json
+$ cat ~/work/wikipedia-utils/20240401/page-ids-jawiki-20240401.json|jq -s -c 'sort_by(.pageid)[]' > ~/work/wikipedia-utils/20240401/page-ids-jawiki-20240401-sorted.json
+$ mv ~/work/wikipedia-utils/20240401/page-ids-jawiki-20240401-sorted.json ~/work/wikipedia-utils/20240401/page-ids-jawiki-20240401.json
 ```
 
 The script outputs a JSON Lines file containing following items, one item per line:
@@ -53,7 +53,7 @@ The script outputs a JSON Lines file containing following items, one item per li
 {
   "title": "アンパサンド",
   "pageid": 5,
-  "revid": 89167474,
+  "revid": 99347164,
   "num_inlinks": 279,
   "is_disambiguation_page": false,
   "is_sexual_page": false,
@@ -75,31 +75,31 @@ You should also set your contact information (e.g., email address) in the User-A
 
 
 ```sh
-$ split -n l/8 --numeric-suffixes=1 --additional-suffix=.json ~/work/wikipedia-utils/20230403/page-ids-jawiki-20230403.json ~/work/wikipedia-utils/20230403/page-ids-jawiki-20230403.
+$ split -n l/10 --numeric-suffixes=1 --additional-suffix=.json ~/work/wikipedia-utils/20240401/page-ids-jawiki-20240401.json ~/work/wikipedia-utils/20240401/page-ids-jawiki-20240401.
 
 # It takes about 1 or 2 days to fetch all the articles in Japanese Wikipedia
-$ for i in `seq -f %02g 1 8`; do \
+$ for i in `seq -f %02g 1 10`; do \
 python get_page_htmls.py \
---page_ids_file ~/work/wikipedia-utils/20230403/page-ids-jawiki-20230403.$i.json \
---output_file ~/work/wikipedia-utils/20230403/page-htmls-jawiki-20230403.$i.json.gz \
+--page_ids_file ~/work/wikipedia-utils/20240401/page-ids-jawiki-20240401.$i.json \
+--output_file ~/work/wikipedia-utils/20240401/page-htmls-jawiki-20240401.$i.json.gz \
 --language ja \
 --user_agent <your_contact_information> \
 --batch_size 50 ; \
 done
 
 # If you want the output file sorted by the page id:
-$ for i in `seq -f %02g 1 8`; do \
-zcat ~/work/wikipedia-utils/20230403/page-htmls-jawiki-20230403.$i.json.gz|jq -s -c 'sort_by(.pageid)[]'|gzip > ~/work/wikipedia-utils/20230403/page-htmls-jawiki-20230403-sorted.$i.json.gz && \
-mv ~/work/wikipedia-utils/20230403/page-htmls-jawiki-20230403-sorted.$i.json.gz ~/work/wikipedia-utils/20230403/page-htmls-jawiki-20230403.$i.json.gz ; \
+$ for i in `seq -f %02g 1 10`; do \
+zcat ~/work/wikipedia-utils/20240401/page-htmls-jawiki-20240401.$i.json.gz|jq -s -c 'sort_by(.pageid)[]'|gzip > ~/work/wikipedia-utils/20240401/page-htmls-jawiki-20240401-sorted.$i.json.gz && \
+mv ~/work/wikipedia-utils/20240401/page-htmls-jawiki-20240401-sorted.$i.json.gz ~/work/wikipedia-utils/20240401/page-htmls-jawiki-20240401.$i.json.gz ; \
 done
 
-$ zcat ~/work/wikipedia-utils/20230403/page-htmls-jawiki-20230403.*.json.gz|gzip > ~/work/wikipedia-utils/20230403/page-htmls-jawiki-20230403.json.gz
+$ zcat ~/work/wikipedia-utils/20240401/page-htmls-jawiki-20240401.*.json.gz|gzip > ~/work/wikipedia-utils/20240401/page-htmls-jawiki-20240401.json.gz
 
 # Splitting the file for distribution
-$ gunzip ~/work/wikipedia-utils/20230403/page-htmls-jawiki-20230403.json.gz
-$ split -n l/8 --numeric-suffixes=1 --additional-suffix=.json ~/work/wikipedia-utils/20230403/page-htmls-jawiki-20230403.json ~/work/wikipedia-utils/20230403/page-htmls-jawiki-20230403.
-$ gzip ~/work/wikipedia-utils/20230403/page-htmls-jawiki-20230403.*.json
-$ gzip ~/work/wikipedia-utils/20230403/page-htmls-jawiki-20230403.json
+$ gunzip ~/work/wikipedia-utils/20240401/page-htmls-jawiki-20240401.json.gz
+$ split -n l/10 --numeric-suffixes=1 --additional-suffix=.json ~/work/wikipedia-utils/20240401/page-htmls-jawiki-20240401.json ~/work/wikipedia-utils/20240401/page-htmls-jawiki-20240401.
+$ gzip ~/work/wikipedia-utils/20240401/page-htmls-jawiki-20240401.*.json
+$ gzip ~/work/wikipedia-utils/20240401/page-htmls-jawiki-20240401.json
 ```
 
 The script outputs a gzipped JSON Lines file containing following items, one item per line:
@@ -108,8 +108,8 @@ The script outputs a gzipped JSON Lines file containing following items, one ite
 {
   "title": "アンパサンド",
   "pageid": 5,
-  "revid": 89167474,
-  "url": "https://ja.wikipedia.org/api/rest_v1/page/html/%E3%82%A2%E3%83%B3%E3%83%91%E3%82%B5%E3%83%B3%E3%83%89/89167474",
+  "revid": 99347164,
+  "url": "https://ja.wikipedia.org/api/rest_v1/page/html/%E3%82%A2%E3%83%B3%E3%83%91%E3%82%B5%E3%83%B3%E3%83%89/99347164",
   "html": "<!DOCTYPE html>\n<html prefix=\"dc: http://purl.org/dc/terms/ mw: http://mediawiki.org/rdf/\" ..."
 }
 ```
@@ -122,10 +122,10 @@ This script extracts paragraph texts from a Wikipedia page HTMLs file generated 
 You can specify the minimum and maximum length of the paragraph texts to be extracted.
 
 ```sh
-# This produces 9,668,476 paragraphs
+# This produces 10,144,171 paragraphs
 $ python extract_paragraphs_from_page_htmls.py \
---page_htmls_file ~/work/wikipedia-utils/20230403/page-htmls-jawiki-20230403.json.gz \
---output_file ~/work/wikipedia-utils/20230403/paragraphs-jawiki-20230403.json.gz \
+--page_htmls_file ~/work/wikipedia-utils/20240401/page-htmls-jawiki-20240401.json.gz \
+--output_file ~/work/wikipedia-utils/20240401/paragraphs-jawiki-20240401.json.gz \
 --min_paragraph_length 10 \
 --max_paragraph_length 1000
 ```
@@ -142,22 +142,22 @@ Here we use [mecab-ipadic-NEologd](https://github.com/neologd/mecab-ipadic-neolo
 The output file is a gzipped text file containing one sentence per line, with the pages separated by blank lines.
 
 ```sh
-# 24,387,500 lines from all pages
+# 25,529,795 lines from all pages
 $ python make_corpus_from_paragraphs.py \
---paragraphs_file ~/work/wikipedia-utils/20230403/paragraphs-jawiki-20230403.json.gz \
---output_file ~/work/wikipedia-utils/20230403/corpus-jawiki-20230403.txt.gz \
+--paragraphs_file ~/work/wikipedia-utils/20240401/paragraphs-jawiki-20240401.json.gz \
+--output_file ~/work/wikipedia-utils/20240401/corpus-jawiki-20240401.txt.gz \
 --mecab_option '-d /usr/local/lib/mecab/dic/ipadic-neologd-v0.0.7' \
 --min_sentence_length 10 \
 --max_sentence_length 1000
 
-# 20,133,720 lines from filtered pages
+# 20,555,941 lines from filtered pages
 $ python make_corpus_from_paragraphs.py \
---paragraphs_file ~/work/wikipedia-utils/20230403/paragraphs-jawiki-20230403.json.gz \
---output_file ~/work/wikipedia-utils/20230403/corpus-jawiki-20230403-filtered-large.txt.gz \
+--paragraphs_file ~/work/wikipedia-utils/20240401/paragraphs-jawiki-20240401.json.gz \
+--output_file ~/work/wikipedia-utils/20240401/corpus-jawiki-20240401-filtered-large.txt.gz \
 --mecab_option '-d /usr/local/lib/mecab/dic/ipadic-neologd-v0.0.7' \
 --min_sentence_length 10 \
 --max_sentence_length 1000 \
---page_ids_file ~/work/wikipedia-utils/20230403/page-ids-jawiki-20230403.json \
+--page_ids_file ~/work/wikipedia-utils/20240401/page-ids-jawiki-20240401.json \
 --min_inlinks 10 \
 --exclude_sexual_pages
 ```
@@ -171,8 +171,8 @@ In addition, since the `text` attributes in the Cirrussearch dump file does not 
 
 ```sh
 $ python make_corpus_from_cirrussearch.py \
---cirrus_file ~/data/wikipedia/cirrussearch/20230403/jawiki-20230403-cirrussearch-content.json.gz \
---output_file ~/work/wikipedia-utils/20230403/corpus-jawiki-20230403-cirrus.txt.gz \
+--cirrus_file ~/data/wikipedia/cirrussearch/20240401/jawiki-20240401-cirrussearch-content.json.gz \
+--output_file ~/work/wikipedia-utils/20240401/corpus-jawiki-20240401-cirrus.txt.gz \
 --min_inlinks 10 \
 --exclude_sexual_pages \
 --mecab_option '-d /usr/local/lib/mecab/dic/ipadic-neologd-v0.0.7'
@@ -188,20 +188,20 @@ It is useful for creating texts of a reasonable length that can be handled by pa
 
 ```sh
 # Construct each passage from a paragraph not exceeding 400 chars
-# 9,397,066 passages
+# 9,856,972 passages
 $ python make_passages_from_paragraphs.py \
---paragraphs_file ~/work/wikipedia-utils/20230403/paragraphs-jawiki-20230403.json.gz \
---output_file ~/work/wikipedia-utils/20230403/passages-para-jawiki-20230403.json.gz \
+--paragraphs_file ~/work/wikipedia-utils/20240401/paragraphs-jawiki-20240401.json.gz \
+--output_file ~/work/wikipedia-utils/20240401/passages-para-jawiki-20240401.json.gz \
 --passage_unit paragraph \
 --passage_boundary section \
 --max_passage_length 400
 
 # Construct passages from consecutive sentences within a section
 # The sentences are joined to form a passage not exceeding 400 chars
-# 5,555,583 passages
+# 5,807,053 passages
 $ python make_passages_from_paragraphs.py \
---paragraphs_file ~/work/wikipedia-utils/20230403/paragraphs-jawiki-20230403.json.gz \
---output_file ~/work/wikipedia-utils/20230403/passages-c400-jawiki-20230403.json.gz \
+--paragraphs_file ~/work/wikipedia-utils/20240401/paragraphs-jawiki-20240401.json.gz \
+--output_file ~/work/wikipedia-utils/20240401/passages-c400-jawiki-20240401.json.gz \
 --passage_unit sentence \
 --passage_boundary section \
 --max_passage_length 400 \
@@ -209,10 +209,10 @@ $ python make_passages_from_paragraphs.py \
 
 # Construct passages from consecutive sentences within a section
 # The sentences are joined to form a passage not exceeding 300 chars
-# 6,639,833 passages
+# 6,947,948 passages
 $ python make_passages_from_paragraphs.py \
---paragraphs_file ~/work/wikipedia-utils/20230403/paragraphs-jawiki-20230403.json.gz \
---output_file ~/work/wikipedia-utils/20230403/passages-c300-jawiki-20230403.json.gz \
+--paragraphs_file ~/work/wikipedia-utils/20240401/paragraphs-jawiki-20240401.json.gz \
+--output_file ~/work/wikipedia-utils/20240401/passages-c300-jawiki-20240401.json.gz \
 --passage_unit sentence \
 --passage_boundary section \
 --max_passage_length 300 \
@@ -241,19 +241,19 @@ This script builds an Elasticsearch index of passages generated by `make_passage
 
 ```sh
 $ python build_es_index_passages.py \
---passages_file ~/work/wikipedia-utils/20230403/passages-para-jawiki-20230403.json.gz \
---page_ids_file ~/work/wikipedia-utils/20230403/page-ids-jawiki-20230403.json \
---index_name jawiki-20230403-para
+--passages_file ~/work/wikipedia-utils/20240401/passages-para-jawiki-20240401.json.gz \
+--page_ids_file ~/work/wikipedia-utils/20240401/page-ids-jawiki-20240401.json \
+--index_name jawiki-20240401-para
 
 $ python build_es_index_passages.py \
---passages_file ~/work/wikipedia-utils/20230403/passages-c400-jawiki-20230403.json.gz \
---page_ids_file ~/work/wikipedia-utils/20230403/page-ids-jawiki-20230403.json \
---index_name jawiki-20230403-c400
+--passages_file ~/work/wikipedia-utils/20240401/passages-c400-jawiki-20240401.json.gz \
+--page_ids_file ~/work/wikipedia-utils/20240401/page-ids-jawiki-20240401.json \
+--index_name jawiki-20240401-c400
 
 $ python build_es_index_passages.py \
---passages_file ~/work/wikipedia-utils/20230403/passages-c300-jawiki-20230403.json.gz \
---page_ids_file ~/work/wikipedia-utils/20230403/page-ids-jawiki-20230403.json \
---index_name jawiki-20230403-c300
+--passages_file ~/work/wikipedia-utils/20240401/passages-c300-jawiki-20240401.json.gz \
+--page_ids_file ~/work/wikipedia-utils/20240401/page-ids-jawiki-20240401.json \
+--index_name jawiki-20240401-c300
 ```
 
 #### [`build_es_index_cirrussearch.py`](build_es_index_cirrussearch.py)
@@ -263,8 +263,8 @@ Cirrussearch dump files are originally for Elasticsearch bulk indexing, so this 
 
 ```sh
 $ python build_es_index_cirrussearch.py \
---cirrus_file ~/data/wikipedia/cirrussearch/20230403/jawiki-20230403-cirrussearch-content.json.gz \
---index_name jawiki-20230403-cirrus \
+--cirrus_file ~/data/wikipedia/cirrussearch/20240401/jawiki-20240401-cirrussearch-content.json.gz \
+--index_name jawiki-20240401-cirrus \
 --language ja
 ```
 

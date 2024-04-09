@@ -29,6 +29,13 @@ _LICENSE = "The content of Wikipedia is licensed under the CC-BY-SA 3.0 and GFDL
 
 _URL_BASE = "https://github.com/singletongue/wikipedia-utils/releases/download"
 _URLS = {
+    "corpus-jawiki-20240401": f"{_URL_BASE}/2024-04-01/corpus-jawiki-20240401.txt.gz",
+    "corpus-jawiki-20240401-cirrus": f"{_URL_BASE}/2024-04-01/corpus-jawiki-20240401-cirrus.txt.gz",
+    "corpus-jawiki-20240401-filtered-large": f"{_URL_BASE}/2024-04-01/corpus-jawiki-20240401-filtered-large.txt.gz",
+    "paragraphs-jawiki-20240401": f"{_URL_BASE}/2024-04-01/paragraphs-jawiki-20240401.json.gz",
+    "passages-c300-jawiki-20240401": f"{_URL_BASE}/2024-04-01/passages-c300-jawiki-20240401.json.gz",
+    "passages-c400-jawiki-20240401": f"{_URL_BASE}/2024-04-01/passages-c400-jawiki-20240401.json.gz",
+    "passages-para-jawiki-20240401": f"{_URL_BASE}/2024-04-01/passages-para-jawiki-20240401.json.gz",
     "corpus-jawiki-20230403": f"{_URL_BASE}/2023-04-03/corpus-jawiki-20230403.txt.gz",
     "corpus-jawiki-20230403-cirrus": f"{_URL_BASE}/2023-04-03/corpus-jawiki-20230403-cirrus.txt.gz",
     "corpus-jawiki-20230403-filtered-large": f"{_URL_BASE}/2023-04-03/corpus-jawiki-20230403-filtered-large.txt.gz",
